@@ -40,11 +40,14 @@ fetch(queryURL)
     console.log(lat, lon);
     getFiveDay(lat, lon);
     console.log(data.main.temp + "\u00B0")
-    $(".temperature").html("Temp:" + data.main.temp + "\u00B0")
+    $(".temperature").html("Temp: " + data.main.temp + "\u00B0")
+    $(".wind-speed").html("Wind: " + data.wind.speed +" mph")
+    $(".humidity").html("Humidity: " + data.main.humidity + "%")
     console.log(data.wind.speed +" mph")
     console.log(data.main.humidity)
 
     console.log(data.main.temp_max + "\u00B0" + "/"+data.main.temp_min + "\u00B0")
+
 
   });
 }
