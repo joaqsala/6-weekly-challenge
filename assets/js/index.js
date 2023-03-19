@@ -7,15 +7,14 @@ var searchButton = $("#btn")
 var apiKey = "f4d2316cd893af3bab99aa493b1486ad"
 
 
-  //displays the current date in the header of the page
+//displays the current date in the horizontal div
   var today = dayjs().format("MM/DD/YYYY");
-  console.log(today)
-  $("#hereNow").text(`(${today})`)
+  $("#hereNow").text(`(${today})`);
 
+//displays the next 5 dates in the card headers
   var startDate = dayjs().add(1, "day");
 for (var i = 0; i < 5; i++){
   var futureDate = startDate.add(i, "day").format("MM/DD/YYYY");
-  console.log(futureDate)
   var futureDateEl = document.getElementsByClassName("futuredate")[i];
   $(futureDateEl).html("<h4>"+ futureDate + "</h4>");
 }
@@ -39,7 +38,14 @@ fetch(queryURL)
     lat = data.coord.lat
     lon = data.coord.lon
     console.log(lat, lon);
-    getFiveDay(lat, lon)
+    getFiveDay(lat, lon);
+    console.log(data.main.temp + "\u00B0")
+    $(".temperature").html("Temp:" + data.main.temp + "\u00B0")
+    console.log(data.wind.speed +" mph")
+    console.log(data.main.humidity)
+
+    console.log(data.main.temp_max + "\u00B0" + "/"+data.main.temp_min + "\u00B0")
+
   });
 }
 
