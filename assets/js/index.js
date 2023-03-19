@@ -1,30 +1,28 @@
 var searchButton = $("#btn")
 
+
 //openweathermap k name = weatherKey
 // key - f4d2316cd893af3bab99aa493b1486ad
 
 var apiKey = "f4d2316cd893af3bab99aa493b1486ad"
 
 
-//create variables to hold the user input
+  //displays the current date in the header of the page
+  var today = dayjs().format("MM/DD/YYYY");
+  console.log(today)
+  $("#hereNow").text(`(${today})`)
 
-// console.log(city)
-// var city = "Austin"
+  var startDate = dayjs().add(1, "day");
+for (var i = 0; i < 5; i++){
+  var futureDate = startDate.add(i, "day").format("MM/DD/YYYY");
+  console.log(futureDate)
+  var futureDateEl = document.getElementsByClassName("futuredate")[i];
+  $(futureDateEl).html("<h4>"+ futureDate + "</h4>");
+}
 
-//add different query parameters based on user input
-
-//specify state/country variables in API call 
-
-//api request by city name:
-// https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
-
-//api request by city name, country code 
-// https://api.openweathermap.org/data/2.5/weather?q={city name},{country code}&appid={API key}
-
-//api request by city name, state code (US only) country code 
-//https://api.openweathermap.org/data/2.5/weather?q={city name},{state code},{country code}&appid={API key}
 
 function getWeather() {
+//variable to hold user input
 var formInput = $("#city-input");
 var city = formInput.val()
 var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&units=imperial";
