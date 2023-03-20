@@ -15,7 +15,7 @@ var apiKey = "f4d2316cd893af3bab99aa493b1486ad"
   var startDate = dayjs().add(1, "day");
 for (var i = 0; i < 5; i++){
   var futureDate = startDate.add(i, "day").format("MM/DD/YYYY");
-  var futureDateEl = document.getElementsByClassName("futuredate")[i];
+  var futureDateEl = document.getElementsByClassName("future-date")[i];
   $(futureDateEl).html("<h4>"+ futureDate + "</h4>");
 }
 
@@ -37,23 +37,21 @@ fetch(queryURL)
     console.log(data);
     lat = data.coord.lat
     lon = data.coord.lon
-    console.log(lat, lon);
-    getFiveDay(lat, lon);
-    console.log(data.main.temp + "\u00B0")
-    $(".temperature").html("Temp: " + data.main.temp + "\u00B0")
+    
+    $(".temperature").html("Temp: " + data.main.temp + "\u00B0 F")
     $(".wind-speed").html("Wind: " + data.wind.speed +" mph")
-    $(".humidity").html("Humidity: " + data.main.humidity + "%")
-    console.log(data.wind.speed +" mph")
-    console.log(data.main.humidity)
-
-    console.log(data.main.temp_max + "\u00B0" + "/"+data.main.temp_min + "\u00B0")
-
+    $(".humidity").html(`Humidity: ${data.main.humidity} %`)
+    
+    //the temp_max/min from Current weather api describe the max and min for current temp only - not for day
+    // console.log(data.main.temp_max + "\u00B0" + "/"+data.main.temp_min + "\u00B0")
+    
+    getFiveDay(lat, lon);
 
   });
 }
 
   function getFiveDay(lat, lon) {
-    var fiveDay = "http://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey;
+    var fiveDay = "http://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey + "&units=imperial" ;
     console.log(fiveDay)
   
     fetch(fiveDay)
@@ -62,8 +60,35 @@ fetch(queryURL)
     })
     .then(function (data) {
       console.log(data);
+
+        var averages = [];
+
+      for (let i = 0; i < data.list.length; i+=8) {
+        console.log(i);
+          let temp = 0;
+          let humidity = 0;
+          let wind = 0;
+
+        for(let j = 0; j < 8; j++){
+          temp += data.list[i+j].main.temp;
+          humidity += data.list[i+j].main.humidity;
+          wind += data.list[i+j].wind.speed;
+        }
+
+          temp /= 8;
+          humidity /= 8;
+          wind /= 8;
+
+       console.log(averages)
+      }
+
+      
+  
     });
   }
+
+
+
 
 searchButton.click(function(event){
     event.preventDefault();
