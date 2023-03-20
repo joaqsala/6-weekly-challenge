@@ -9,7 +9,7 @@ var apiKey = "f4d2316cd893af3bab99aa493b1486ad"
 
 //displays the current date in the horizontal div
   var today = dayjs().format("MM/DD/YYYY");
-  $("#hereNow").text(`(${today})`);
+  $("#hereNow").text(`${today}`);
 
 //displays the next 5 dates in the card headers
   var startDate = dayjs().add(1, "day");
@@ -79,9 +79,35 @@ fetch(queryURL)
           humidity /= 8;
           wind /= 8;
 
+        const dateTimePieces = data.list[i].dt_txt.split(" ")[0].split("-");
+        const futureDate = `${dateTimePieces[1]}/${dateTimePieces[2]}/${dateTimePieces[0]}`
+
+       averages.push({
+        date: futureDate,
+        temperature: Math.round(temp),
+        humidity: Math.round(humidity),
+        wind: Math.round(wind),
+        // icon: data.list[i].weather[0].icon
+       })
+
        console.log(averages)
       }
-
+      let cardsHTML = "";
+      for (let i = 0; i < averages.length; i++){
+        cardsHTML += ` <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"> ${averages[i].date} </h5>
+                <p class="future-icon"> </p>
+                <p class="future-high-temp">Temp: ${averages[i].temperature}</p>
+                <p class="future-wind">Wind: ${averages[i].wind}</p>
+                <p class="future-humid">Humidity: ${averages[i].humidity}</p>
+            </div>
+        </div>
+      </div>`
+      }
+      $("#forecast").html(cardsHTML)
+      console.log(cardsHTML)
       
   
     });
