@@ -20,10 +20,12 @@ for (var i = 0; i < 5; i++){
 }
 
 
+var city;
+
 function getWeather() {
-//variable to hold user input
-var formInput = $("#city-input");
-var city = formInput.val()
+  var formInput = $("#city-input");
+  city = formInput.val()
+
 var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&units=imperial";
 
 var lat;
@@ -37,7 +39,10 @@ fetch(queryURL)
     console.log(data);
     lat = data.coord.lat
     lon = data.coord.lon
-    
+
+    var iconURL = "https://openweathermap.org/img/wn/" + data.weather[0].icon + "@2x.png"
+
+    $("#main-icon").attr("src", iconURL)
     $(".temperature").html("Temp: " + data.main.temp + "\u00B0 F")
     $(".wind-speed").html("Wind: " + data.wind.speed +" mph")
     $(".humidity").html(`Humidity: ${data.main.humidity} %`)
@@ -46,7 +51,7 @@ fetch(queryURL)
     // console.log(data.main.temp_max + "\u00B0" + "/"+data.main.temp_min + "\u00B0")
     
     getFiveDay(lat, lon);
-
+    displayCity(city);
   });
 }
 
@@ -69,6 +74,8 @@ fetch(queryURL)
           let humidity = 0;
           let wind = 0;
 
+          let futureIcon = data.list[i].weather[0].icon
+
         for(let j = 0; j < 8; j++){
           temp += data.list[i+j].main.temp;
           humidity += data.list[i+j].main.humidity;
@@ -79,26 +86,31 @@ fetch(queryURL)
           humidity /= 8;
           wind /= 8;
 
-        const dateTimePieces = data.list[i].dt_txt.split(" ")[0].split("-");
+        const dateTimePieces = data.list[i+5].dt_txt.split(" ")[0].split("-");
         const futureDate = `${dateTimePieces[1]}/${dateTimePieces[2]}/${dateTimePieces[0]}`
 
        averages.push({
         date: futureDate,
+        icon: data.list[i].weather[0].icon,
         temperature: Math.round(temp),
         humidity: Math.round(humidity),
         wind: Math.round(wind),
-        // icon: data.list[i].weather[0].icon
        })
 
        console.log(averages)
       }
+
+      
       let cardsHTML = "";
       for (let i = 0; i < averages.length; i++){
+
+        var iconURL = "https://openweathermap.org/img/wn/" + averages[i].icon + "@2x.png"
+        
         cardsHTML += ` <div class="col">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title"> ${averages[i].date} </h5>
-                <p class="future-icon"> </p>
+                <h5 class="card-title"> ${ averages[i].date} </h5>
+                <img src=${iconURL} class="future-icon" alt=${averages[i].icon}/>   
                 <p class="future-high-temp">Temp: ${averages[i].temperature}</p>
                 <p class="future-wind">Wind: ${averages[i].wind}</p>
                 <p class="future-humid">Humidity: ${averages[i].humidity}</p>
@@ -106,14 +118,18 @@ fetch(queryURL)
         </div>
       </div>`
       }
-      $("#forecast").html(cardsHTML)
-      console.log(cardsHTML)
-      
+      $("#forecast").html(cardsHTML)      
   
     });
   }
 
-
+function displayCity(userCity){
+  console.log(userCity)
+  var cityListItems = document.createElement("li");
+  cityListItems.textContent = userCity;
+  console.log(cityListItems);
+  $("#city-list").append(cityListItems)
+}
 
 
 searchButton.click(function(event){
