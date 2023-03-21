@@ -9,7 +9,7 @@ var apiKey = "f4d2316cd893af3bab99aa493b1486ad"
 
 //displays the current date in the horizontal div
   var today = dayjs().format("MM/DD/YYYY");
-
+  $("#here-now").text(today);
 
 //displays the next 5 dates in the card headers
 //   var startDate = dayjs().add(1, "day");
@@ -24,7 +24,7 @@ var city;
 
 function getWeather() {
   var formInput = $("#city-input");
-  city = formInput.val();
+  city = formInput.val().trim();
 
   var displayText = today + "   -   " + city;
   $("#here-now").text(displayText);
@@ -87,7 +87,7 @@ fetch(queryURL)
           humidity /= 8;
           wind /= 8;
 
-        const dateTimePieces = data.list[i+5].dt_txt.split(" ")[0].split("-");
+        const dateTimePieces = data.list[i+7].dt_txt.split(" ")[0].split("-");
         const futureDate = `${dateTimePieces[1]}/${dateTimePieces[2]}/${dateTimePieces[0]}`
 
        averages.push({
@@ -112,9 +112,9 @@ fetch(queryURL)
             <div class="card-body">
                 <h5 class="card-title"> ${ averages[i].date} </h5>
                 <img src=${iconURL} class="future-icon" alt=${averages[i].icon}/>   
-                <p class="future-high-temp">Temp: ${averages[i].temperature}</p>
-                <p class="future-wind">Wind: ${averages[i].wind}</p>
-                <p class="future-humid">Humidity: ${averages[i].humidity}</p>
+                <p class="future-high-temp">Temp: ${averages[i].temperature} \u00B0F</p>
+                <p class="future-wind">Wind: ${averages[i].wind} mph</p>
+                <p class="future-humid">Humidity: ${averages[i].humidity}%</p>
             </div>
         </div>
       </div>`
@@ -127,14 +127,15 @@ fetch(queryURL)
 function displayCity(userCity){
   console.log(userCity)
   var cityListItems = document.createElement("button");
+  cityListItems.classList.add("btn-secondary", "btn-block", "text-white-50", "p-2", "m-2");
   cityListItems.textContent = userCity;
   console.log(cityListItems);
-  $("#city-list").append(cityListItems)
+  $("#city-list").append(cityListItems);
 }
 
 
 searchButton.click(function(event){
     event.preventDefault();
-    $("#hide").removeClass("hidden");
+    $("#hide").removeClass("d-none");
     getWeather();
 })
