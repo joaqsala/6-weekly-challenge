@@ -9,22 +9,25 @@ var apiKey = "f4d2316cd893af3bab99aa493b1486ad"
 
 //displays the current date in the horizontal div
   var today = dayjs().format("MM/DD/YYYY");
-  $("#hereNow").text(`${today}`);
+
 
 //displays the next 5 dates in the card headers
-  var startDate = dayjs().add(1, "day");
-for (var i = 0; i < 5; i++){
-  var futureDate = startDate.add(i, "day").format("MM/DD/YYYY");
-  var futureDateEl = document.getElementsByClassName("future-date")[i];
-  $(futureDateEl).html("<h4>"+ futureDate + "</h4>");
-}
+//   var startDate = dayjs().add(1, "day");
+// for (var i = 0; i < 5; i++){
+//   var futureDate = startDate.add(i, "day").format("MM/DD/YYYY");
+//   var futureDateEl = document.getElementsByClassName("future-date")[i];
+//   $(futureDateEl).html("<h4>"+ futureDate + "</h4>");
+// }
 
 
 var city;
 
 function getWeather() {
   var formInput = $("#city-input");
-  city = formInput.val()
+  city = formInput.val();
+
+  var displayText = today + "   -   " + city;
+  $("#here-now").text(displayText);
 
 var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&units=imperial";
 
@@ -43,12 +46,10 @@ fetch(queryURL)
     var iconURL = "https://openweathermap.org/img/wn/" + data.weather[0].icon + "@2x.png"
 
     $("#main-icon").attr("src", iconURL)
-    $(".temperature").html("Temp: " + data.main.temp + "\u00B0 F")
+    $(".temperature").html("Temp: " + data.main.temp + "\u00B0F")
     $(".wind-speed").html("Wind: " + data.wind.speed +" mph")
-    $(".humidity").html(`Humidity: ${data.main.humidity} %`)
+    $(".humidity").html(`Humidity: ${data.main.humidity}%`)
     
-    //the temp_max/min from Current weather api describe the max and min for current temp only - not for day
-    // console.log(data.main.temp_max + "\u00B0" + "/"+data.main.temp_min + "\u00B0")
     
     getFiveDay(lat, lon);
     displayCity(city);
@@ -91,7 +92,7 @@ fetch(queryURL)
 
        averages.push({
         date: futureDate,
-        icon: data.list[i].weather[0].icon,
+        icon: futureIcon,
         temperature: Math.round(temp),
         humidity: Math.round(humidity),
         wind: Math.round(wind),
@@ -125,7 +126,7 @@ fetch(queryURL)
 
 function displayCity(userCity){
   console.log(userCity)
-  var cityListItems = document.createElement("li");
+  var cityListItems = document.createElement("button");
   cityListItems.textContent = userCity;
   console.log(cityListItems);
   $("#city-list").append(cityListItems)
@@ -134,5 +135,6 @@ function displayCity(userCity){
 
 searchButton.click(function(event){
     event.preventDefault();
+    $("#hide").removeClass("hidden");
     getWeather();
 })
