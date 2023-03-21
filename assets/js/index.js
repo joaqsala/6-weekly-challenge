@@ -22,9 +22,15 @@ var apiKey = "f4d2316cd893af3bab99aa493b1486ad"
 
 var city;
 
+var locations = [];
+
 function getWeather() {
   var formInput = $("#city-input");
   city = formInput.val().trim();
+
+    locations.push(city);
+    localStorage.setItem('history', JSON.stringify(locations));
+  
 
   var displayText = today + "   -   " + city;
   $("#here-now").text(displayText);
@@ -70,14 +76,13 @@ fetch(queryURL)
         var averages = [];
 
       for (let i = 0; i < data.list.length; i+=8) {
-        console.log(i);
           let temp = 0;
           let humidity = 0;
           let wind = 0;
 
           let futureIcon = data.list[i].weather[0].icon
 
-        for(let j = 0; j < 8; j++){
+        for (let j = 0; j < 8; j++){
           temp += data.list[i+j].main.temp;
           humidity += data.list[i+j].main.humidity;
           wind += data.list[i+j].wind.speed;
@@ -97,8 +102,6 @@ fetch(queryURL)
         humidity: Math.round(humidity),
         wind: Math.round(wind),
        })
-
-       console.log(averages)
       }
 
       
@@ -127,12 +130,27 @@ fetch(queryURL)
 function displayCity(userCity){
   console.log(userCity)
   var cityListItems = document.createElement("button");
-  cityListItems.classList.add("btn-secondary", "btn-block", "text-white-50", "p-2", "m-2");
+  cityListItems.classList.add("btn-secondary", "btn-block", "text-white-50", "p-1", "m-2");
   cityListItems.textContent = userCity;
   console.log(cityListItems);
   $("#city-list").append(cityListItems);
 }
 
+
+function renderCityList(){
+  var cityHistory = [];
+  if (localStorage.getItem("history")){
+    var cityHistory = JSON.parse(localStorage.getItem("history"))
+  }
+  for (var i = 0; i < cityHistory.length; i++){
+    var cityHistoryItems = document.createElement("button");
+    cityHistoryItems.classList.add("btn-secondary", "btn-block", "text-white-50", "p-1", "m-2");
+    cityHistoryItems.textContent = cityHistory[i];
+    $("#city-list").append(cityHistoryItems);
+  }
+}
+
+renderCityList();
 
 searchButton.click(function(event){
     event.preventDefault();
