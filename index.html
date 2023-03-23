@@ -8,13 +8,17 @@
     <title>Weather to You</title>
     <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
-<body class="min-100-vh">
+<body class="min-100-vh">  <!--sets the view height-->
     <main class="mx-auto">
+    <!--top header row-->
     <header class="p-3 text-center text-white bg-info gradient">
         <h1>Weather Dashboard</h1>
     </header>
+    <!--starts container body -->
     <div class="container-fluid">
+        <!--creates 1st row-->
         <div class="row p-4"> 
+            <!--creates 1st column that contains card on the left-->
             <div class="col-lg-4 col-md-6">
                 <div class="card">
                     <div class="card-body">
@@ -28,8 +32,11 @@
                     </div>
                 </div>
             </div>
+            <!--creates 2nd column that contains cards on the right-->
             <div class="col-lg-8 col-md-6">
+                <!--creates 1st row of the 2nd column stack-->
                 <div class="row">
+                <!--creates column that contains top card-->
                 <div class="card col-12">
                     <div class="card-body">
                         <h2 class="p-2" id="here-now"> </h2>
@@ -40,7 +47,9 @@
                     </div>
                 </div>
                 </div>
-                    <div class="row hidden d-none" id="hide">
+                    <!--creates 2nd row of the 2nd column stack-->
+                    <div class="row d-none" id="hide">
+                            <!--creates column that contains bottom card-->
                             <div class="card col-12">
                                 <div class="card-body">
                                     <h3 class="p-3">5-Day Forecast:</h3>
