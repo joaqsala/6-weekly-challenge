@@ -20,7 +20,7 @@ $("#here-now").text(today);
 var city;
 
 //used to make local storage global
-var locations = [];
+// var locations = [];
 
 function getWeather() {
   //gets user input and sets it to: city
@@ -28,6 +28,7 @@ function getWeather() {
   city = formInput.val().trim();
 
   //pushes city into the array that is then set to local storage
+  var locations = JSON.parse(localStorage.getItem("history")) || [];
   locations.push(city);
   localStorage.setItem("history", JSON.stringify(locations));
 
@@ -146,15 +147,15 @@ function displayCity(userCity) {
   console.log(cityListItems);
   $("#city-list").append(cityListItems);
 
-  // cityListItems.addEventListener('click', function(){
-  //   city = userCity;
-  //   getWeather();
-  // })
+  cityListItems.addEventListener('click', function(){
+    city = userCity;
+    getWeather();
+  })
 }
 
 // on page load, the localStorage is pulled and run through displays the user input into the 'history' at the bottom of the search bar
 function renderCityList() {
-  var cityHistory = [];
+  // var cityHistory = [];
   if (localStorage.getItem("history")) {
     var cityHistory = JSON.parse(localStorage.getItem("history"));
   }
