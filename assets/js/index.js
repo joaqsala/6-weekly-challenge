@@ -20,18 +20,32 @@ $("#here-now").text(today);
 var city;
 
 //used to make local storage global
-// var locations = [];
+var locations = JSON.parse(localStorage.getItem("history")) || [];
+for (var i = 0; i < locations.length; i++) {
+  displayCity(locations[i]);
+}
 
-function getWeather() {
+function getStarted() {
   //gets user input and sets it to: city
   var formInput = $("#city-input");
   city = formInput.val().trim();
 
   //pushes city into the array that is then set to local storage
-  var locations = JSON.parse(localStorage.getItem("history")) || [];
+  console.log(city)
+  console.log(locations)
+  console.log("addingthiscityintolocalStorage: " + city)
+  if(locations.includes(city)){
+    getWeather(city);
+  } else {
   locations.push(city);
+  console.log(locations)
   localStorage.setItem("history", JSON.stringify(locations));
+  getWeather(city);
+  displayCity(city);
+}
+}
 
+  function getWeather(city) {
   //displays date and city upon click event
   var displayText = today + "   -   " + city;
   $("#here-now").text(displayText);
@@ -63,7 +77,7 @@ function getWeather() {
 
       //calls the 5-day forcast function sending the lat/ and the displayCity function to add a button underneath
       getFiveDay(lat, lon);
-      displayCity(city);
+      
     });
 }
 
@@ -114,6 +128,7 @@ function getFiveDay(lat, lon) {
           humidity: Math.round(humidity),
           wind: Math.round(wind),
         });
+        
       }
 
       let cardsHTML = "";
@@ -134,43 +149,34 @@ function getFiveDay(lat, lon) {
         </div>
       </div>`;
       }
+      $("#hide").removeClass("d-none");
       $("#forecast").html(cardsHTML);
     });
 }
 
 //displays the user input into the 'history' at the bottom of the search bar
 function displayCity(userCity) {
-  console.log(userCity);
+  // console.log(userCity);
   var cityListItems = document.createElement("button");
   cityListItems.classList.add("btn-secondary", "btn-block", "text-white-50", "p-1", "m-2");
   cityListItems.textContent = userCity;
-  console.log(cityListItems);
   $("#city-list").append(cityListItems);
 
-  cityListItems.addEventListener('click', function(){
-    city = userCity;
-    getWeather();
-  })
+  // console.log($("#city-list")[0])
+  // console.log($("#city-list")[0].children[0])
+  // console.log($("#city-list")[0].children[0].textContent)
+  // for (var i = 0; i < )
+  
+  cityListItems.addEventListener('click', function(event){
+    if (event.target.matches("button")){
+      city = userCity;
+      getWeather(city);
 }
-
-// on page load, the localStorage is pulled and run through displays the user input into the 'history' at the bottom of the search bar
-function renderCityList() {
-  // var cityHistory = [];
-  if (localStorage.getItem("history")) {
-    var cityHistory = JSON.parse(localStorage.getItem("history"));
-  }
-  //each item in localStorage gets passed through to the displayCity function
-  for (var i = 0; i < cityHistory.length; i++) {
-    displayCity(cityHistory[i]);
-  }
+})
 }
-
-//runs the function on page load
-renderCityList();
 
 //event listener for searchButton that runs the getWeather function
 searchButton.click(function (event) {
   event.preventDefault();
-  $("#hide").removeClass("d-none");
-  getWeather();
+  getStarted();
 });
