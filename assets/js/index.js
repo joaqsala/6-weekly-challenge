@@ -51,7 +51,7 @@ function getStarted() {
   $("#here-now").text(displayText);
 
   //url for the day's local weather
-  var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&units=imperial";
+  var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&units=imperial";
 
   var lat;
   var lon;
@@ -83,7 +83,7 @@ function getStarted() {
 
 function getFiveDay(lat, lon) {
   //URL for the 5-day forcast
-  var fiveDay = "http://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey + "&units=imperial";
+  var fiveDay = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey + "&units=imperial";
   console.log(fiveDay);
 
   fetch(fiveDay)
